@@ -23,14 +23,40 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+     # 2. Configurar Python en el entorno de GitHub Actions
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # Usa la versión de Python que necesites
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    # 3. Instalar Jupyter para nbconvert
+    - name: Install Jupyter and dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install jupyter
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    # 4. Convertir el notebook a Markdown y HTML
+    - name: Convertir notebook a Markdown y HTML
+      run: |
+        jupyter nbconvert --to markdown Scrapy_2.ipynb
+        jupyter nbconvert --to html Scrapy_2.ipynb
+
+    # 5. Subir a GitHub Pages (rama gh-pages)
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'  # Solo en pushes a 'main'
+      run: |
+        git config --global gedar1 "github-actions[bot]"
+        git config --global gedar1971@gmail.com "github-actions[bot]@users.noreply.github.com"
+        
+        # Clonamos la rama gh-pages en un directorio separado
+        git clone --branch=gh-pages https://github.com/${{ gedar1/scrapy_act_2.git }} gh-pages
+
+        # Movemos los archivos convertidos a la carpeta gh-pages
+        mv Scrapy_2.md gh-pages/
+        mv Scrapy_2.html gh-pages/
+
+        # Hacemos commit y push en gh-pages
+        cd gh-pages
+        git add .
+        git commit -m "Publicar notebook convertido a Markdown y HTML"
+        git push origin gh-pages
