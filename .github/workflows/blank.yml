@@ -42,21 +42,11 @@ jobs:
         jupyter nbconvert --to html Scrapy_2.ipynb
 
     # 5. Subir a GitHub Pages (rama gh-pages)
-    - name: Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/main'  # Solo en pushes a 'main'
+   # 5. Subir los archivos convertidos al repositorio
+    - name: Commit and push changes
       run: |
         git config --global gedar1 "github-actions[bot]"
         git config --global gedar1971@gmail.com "github-actions[bot]@users.noreply.github.com"
-        
-        # Clonamos la rama gh-pages en un directorio separado
-        git clone --branch=gh-pages https://github.com/${{ gedar1/scrapy_act_2.git }} gh-pages
-
-        # Movemos los archivos convertidos a la carpeta gh-pages
-        mv Scrapy_2.md gh-pages/
-        mv Scrapy_2.html gh-pages/
-
-        # Hacemos commit y push en gh-pages
-        cd gh-pages
         git add .
-        git commit -m "Publicar notebook convertido a Markdown y HTML"
-        git push origin gh-pages
+        git commit -m "Convertido notebook a Markdown y HTML en el PR"
+        git push origin HEAD:${{ github.head_ref }}  # Push a la rama del PR
