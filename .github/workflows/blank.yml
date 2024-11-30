@@ -23,14 +23,27 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+     # 2. Configurar Python en el entorno de GitHub Actions
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # Usa la versión de Python que necesites
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    # 3. Instalar Jupyter para nbconvert
+    - name: Install Jupyter and dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install jupyter
+    # 4. Convertir el notebook a Markdown y HTML
+    - name: Convertir notebook a Markdown y HTML
+      run: |
+        jupyter nbconvert --to html 'Scrapy_2.ipynb'
+    # 5. Subir a GitHub Pages (rama gh-pages)
+   # 5. Subir los archivos convertidos al repositorio
+    - name: Commit and push changes
+      run: |
+        git config --global gedar1 "github-actions[bot]"
+        git config --global gedar1971@gmail.com "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Convertido notebook a Markdown y HTML en el PR"
+        git push origin HEAD:${{ github.head_ref }}  # Push a la rama del PR
