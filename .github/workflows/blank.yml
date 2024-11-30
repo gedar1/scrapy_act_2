@@ -35,8 +35,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install jupyter
 
-    - name: List files
+    - name: List files in root
       run: ls -la
+
+    # Listar solo subcarpetas en el directorio raíz (nivel superior)
+    - name: List subdirectories in root
+      run: ls -l | grep "^d"
+
+    # Si hay una carpeta relevante, como notebooks, listar su contenido
+    - name: List files in 'notebooks' folder (if exists)
+      if: ${{ steps.checkout.outputs.dir == 'notebooks' }}
+      run: ls -la notebooks/
+
+    # Usar 'find' para listar todos los archivos y carpetas dentro del workspace
+    - name: List all files and directories recursively
+      run: find . -type f -or -type d
     # 4. Convertir el notebook a Markdown y HTML
     - name: Convertir notebook a Markdown y HTML
       run: |
