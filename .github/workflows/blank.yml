@@ -29,6 +29,8 @@ jobs:
       with:
         python-version: '3.x'  # Usa la versión de Python que necesites
 
+    - name: List files
+      run: ls -la
     # 3. Instalar Jupyter para nbconvert
     - name: Install Jupyter and dependencies
       run: |
