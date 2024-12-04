@@ -51,7 +51,7 @@ jobs:
     # 4. Convertir el notebook a Markdown y HTML
     - name: Convertir notebook a Markdown y HTML
       run: |
-        jupyter nbconvert --to html "Scrapy_2.ipynb"
+        jupyter nbconvert --to html "/main/Scrapy_2.ipynb"
     # 5. Subir a GitHub Pages (rama gh-pages)
    # 5. Subir los archivos convertidos al repositorio
     - name: Commit and push changes
